@@ -36,7 +36,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let mut router = Router::with_data(task_reg.clone());
     router = router
         .options("/submit", |_req, _ctx| Response::empty())
-        .post_async("/submit", routes::submit::handle);
+        .post_async("/submit", routes::submit::handle)
+        .options("/run", |_, _| Response::empty())
+        .post_async("/run", routes::run::handle);
 
     let cors = Cors::new()
         .with_allowed_headers(["*"])
