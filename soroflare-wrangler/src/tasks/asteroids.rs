@@ -130,8 +130,8 @@ impl super::Task for Asteroids {
         let fuel_req = soroban_vm::invoke(&engine_id, "p_fuel", &vec![], &mut state).unwrap();
         let pos_req = soroban_vm::invoke(&engine_id, "p_pos", &vec![], &mut state).unwrap();
 
-        let cpu_count = user_solve_budget.get_cpu_insns_count();
-        let mem_count = user_solve_budget.get_mem_bytes_count();
+        let cpu_count = user_solve_budget.get_cpu_insns_consumed();
+        let mem_count = user_solve_budget.get_mem_bytes_consumed();
 
         if let ScVal::U32(i) = points_req.0 {
             if i < 100u32 {
