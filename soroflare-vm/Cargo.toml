@@ -5,12 +5,12 @@ edition = "2021"
 publish = false
 
 [dependencies]
-soroban-env-host = { version = "0.0.17", git = "https://github.com/stellar/rs-soroban-env", rev = "400d806387140553e4e685d232deb3a807ec0e36" }
-soroban-spec-tools = { version = "0.9.4", git = "https://github.com/stellar/soroban-tools"}
-soroban-spec = { version = "0.9.1", git = "https://github.com/stellar/rs-soroban-sdk", rev = "e48a3c435a1c1e1055f03f8e507c63f62a927ef9" }
-soroban-ledger-snapshot = { version = "0.9.1", git = "https://github.com/stellar/rs-soroban-sdk", rev = "e48a3c435a1c1e1055f03f8e507c63f62a927ef9" }
-stellar-xdr = { version = "0.0.17", git = "https://github.com/stellar/rs-stellar-xdr", rev = "0f16673441898162c9996da6117be2280ef8fd84", default-features = false }
-stellar-strkey = "0.0.7"
+soroban-env-host = { workspace = true }
+soroban-spec-tools = { workspace = true }
+soroban-spec = { workspace = true }
+soroban-ledger-snapshot = { workspace = true }
+stellar-xdr = { workspace = true }
+stellar-strkey = { workspace = true }
 ed25519-dalek = "1.0.1"
 hex = "0.4.3"
 sha2 = "0.10.6"

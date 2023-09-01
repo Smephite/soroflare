@@ -1,4 +1,4 @@
-// https://github.com/stellar/soroban-tools/blob/v0.9.4/cmd/soroban-cli/src/utils.rs
+// https://github.com/stellar/soroban-tools/blob/v0.9.5/cmd/soroban-cli/src/utils.rs
 use std::{collections::HashMap, io::ErrorKind, path::Path};
 
 use ed25519_dalek::Signer;
@@ -21,11 +21,11 @@ use soroban_env_host::{
     },
 };
 use soroban_ledger_snapshot::LedgerSnapshot;
-// use soroban_sdk::token;
 use soroban_spec::read::FromWasmError;
 use stellar_strkey::ed25519::PrivateKey;
 
 use super::network::sandbox_network_id;
+
 
 /// # Errors
 ///
@@ -229,14 +229,7 @@ pub fn get_contract_spec_from_storage(
                     }),
                 ..
             } => match executable {
-                ContractExecutable::Token => {
-                    // if expiration_ledger_seq <= current_ledger_seq {
-                    //     return Err(FromWasmError::NotFound);
-                    // }
-                    // let res = soroban_spec::read::parse_raw(&token::StellarAssetSpec::spec_xdr());
-                    // res.map_err(FromWasmError::Parse)
-                    unimplemented!("Token contract is not yet implemented")
-                }
+                ContractExecutable::Token => unimplemented!("Tokens are not yet supported!"),
                 ContractExecutable::Wasm(hash) => {
                     if expiration_ledger_seq <= current_ledger_seq {
                         return Err(FromWasmError::NotFound);

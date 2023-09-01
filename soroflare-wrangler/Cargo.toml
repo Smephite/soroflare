@@ -4,6 +4,7 @@ version.workspace = true
 license-file = "LICENSE"
 edition = "2021"
 publish = false
+resolver = "2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -21,9 +22,9 @@ time = "0.1.45"
 erased-serde = "0.3.24"
 chrono = "0.4.23"
 base64 = "0.21.0"
-worker = "0.0.13"
+worker = "0.0.18"
 
-soroban-env-host = { version = "0.0.17", git = "https://github.com/stellar/rs-soroban-env", rev = "400d806387140553e4e685d232deb3a807ec0e36" }
+soroban-env-host = { workspace = true }
 soroflare-vm = { path = "../soroflare-vm" }
 
 

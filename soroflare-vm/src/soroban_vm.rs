@@ -1,5 +1,5 @@
 // This file includes a slightly modified version of the soroban-cli invoke command
-// (https://github.com/stellar/soroban-tools/blob/01cdac0a03fa04399c392f374f3dae0f91a86039/cmd/soroban-cli/src/commands/contract/invoke.rs)
+// (https://github.com/stellar/soroban-tools/blob/v0.9.5/cmd/soroban-cli/src/commands/contract/invoke.rs)
 use std::rc::Rc;
 
 use hex::FromHexError;
@@ -9,16 +9,18 @@ use soroban_env_host::{
     storage::Storage,
     xdr::{
         AccountId, HostFunction, LedgerKey, LedgerKeyAccount, PublicKey,
-        ScVal, ScVec, Uint256, Hash, ScSpecEntry
+        ScVal, ScVec, Uint256, Hash
     },
     Host, HostError,
 };
+
 use soroban_spec::read::FromWasmError;
 use soroban_spec_tools::Spec;
+use stellar_xdr::ScSpecEntry;
 
 use crate::soroban_cli;
 
-// https://github.com/stellar/soroban-tools/blob/v0.9.4/cmd/soroban-cli/src/commands/contract/invoke.rs#L400-L420
+// https://github.com/stellar/soroban-tools/blob/v0.9.5/cmd/soroban-cli/src/commands/contract/invoke.rs#L404-L425
 pub fn deploy(
     src: &[u8],
     contract_id: &[u8; 32],
@@ -50,7 +52,7 @@ pub fn invoke(
     invoke_with_budget(contract_id, fn_name, args, state, None)
 }
 
-/// "basically" https://github.com/stellar/soroban-tools/blob/v0.8.0/cmd/soroban-cli/src/commands/contract/invoke.rs#L306-L403
+/// "basically" https://github.com/stellar/soroban-tools/blob/v0.9.5/cmd/soroban-cli/src/commands/contract/invoke.rs#L302-L402
 pub fn invoke_with_budget(
     contract_id: &[u8; 32],
     fn_name: &str,
@@ -63,7 +65,7 @@ pub fn invoke_with_budget(
     // Create source account, adding it to the ledger if not already present.
     let source_account = AccountId(PublicKey::PublicKeyTypeEd25519(Uint256(
         stellar_strkey::ed25519::PublicKey::from_string(
-            "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+            "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF", // in soroflare we just use a dummy account
         )
         .unwrap()
         .0,
@@ -133,14 +135,15 @@ pub fn invoke_with_budget(
     Ok((res, (storage, budget, events)))
 }
 
-// https://github.com/stellar/soroban-tools/blob/v0.8.0/cmd/soroban-cli/src/commands/contract/invoke.rs#L211-L233
+// https://github.com/stellar/soroban-tools/blob/v0.9.5/cmd/soroban-cli/src/commands/contract/invoke.rs#L265-L234
 fn build_host_function_parameters(
     contract_id: [u8; 32],
     spec_entries: &[ScSpecEntry],
     fn_name: &str,
     parsed_args: &Vec<ScVal>,
 ) -> Result<(String, Spec, ScVec), Error> {
-    let spec = Spec(Some(spec_entries.to_vec()));
+
+    let spec = Spec::new(spec_entries.to_vec());
 
     // Add the contract ID and the function name to the arguments
     let mut complete_args = vec![
