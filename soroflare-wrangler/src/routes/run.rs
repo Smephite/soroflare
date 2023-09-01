@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
 use soroflare_vm::{contract_id, soroflare_utils};
-use worker::{Request, RouteContext, Response};
+use worker::{Request, RouteContext, Response, console_log};
 
 use crate::{tasks::TaskRegistry, response::{BasicJsonResponse, JsonResponse}};
 
 pub async fn handle(
     mut req: Request,
-    ctx: RouteContext<TaskRegistry<'_>>,
+    _ctx: RouteContext<TaskRegistry<'_>>,
 ) -> Result<Response, worker::Error> {
 
     let incoming_raw = req.bytes().await;
@@ -31,6 +31,7 @@ pub async fn handle(
 
     let res = soroflare_vm::soroban_vm::deploy(&data.to_vec(), &contract_id!(0), &mut state);
 
+
     if res.is_err() {
         return BasicJsonResponse::new("Error deploying contract", 500).into();
     }
@@ -44,7 +45,7 @@ pub async fn handle(
         return BasicJsonResponse::new("Missing `fn` to execute", 400).into();
     }
 
-    let res = soroflare_vm::soroban_vm::invoke(&contract_id!(0), &fn_name.unwrap(), &Vec::new(), &mut state);
+    let res = soroflare_vm::soroban_vm::invoke(&contract_id!(0), fn_name.unwrap(), &Vec::new(), &mut state);
 
     if let Err(e) = res {
         return JsonResponse::new("Failed to execute contract", 400)
